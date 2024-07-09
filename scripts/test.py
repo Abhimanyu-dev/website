@@ -26,9 +26,9 @@ if __name__ == "__main__":
 	Edit as required
 	'''
 	OPTIONS = ["Internship", "Placement"]
-	INSIGHT_TYPE = OPTIONS[0]
+	INSIGHT_TYPE = OPTIONS[1]
 
-	YEAR = 2024
+	YEAR = 2022
 
 	'''
 	DRIVER CODE
@@ -57,11 +57,11 @@ if __name__ == "__main__":
 
 		print(fileName)  
 
-		# x = "his" if (row["Gender"]=="M") else "her"  
-		# y = "his" if (row["Gender"]=="M") else "hers"   
+		x = "his" if (row["Gender"]=="M") else "her"  
+		y = "his" if (row["Gender"]=="M") else "hers"   
 
 		
-		file = open("../posts/"+str(fileName) + ".mdx", 'w')
+		file = open("draft/"+str(fileName) + ".mdx", 'w+')
 		file.write("---\n")
 		file.write("title: "+ "'" +row["Name"] + ": Summer Intern at " +
 				   row["Company"] + "'\n")
@@ -74,8 +74,9 @@ if __name__ == "__main__":
 		file.write("---" + "\n" + "\n")
         
 		if INSIGHT_TYPE == OPTIONS[0]:
-			file.write(str(row["Name"]) + ", studying in IIT Kanpur as a " + str(row["ProgrammeandDepartment"]) + " student " +  " will do\n summer internship in " + str(row["Profile"]) 
-				+ " profile at " + row["Company"] + ". Here are some brief\n" + "insights.\n\n")
+			file.write(str(row["Name"]) + ", studying in IIT Kanpur as a " + str(row["Programme"]) + " student in " + 
+				str(row["Department"]) + " will do\n" + x +  " summer internship in " + str(row["Profile"]) 
+				+ " profile at " + row["Company"] + ". Here are some brief\n" + "insights of " + y +".\n\n")
 		else:
 			file.write(str(row["Name"]) + ", studying in IIT Kanpur as a " + str(row["Programme"]) + " student in " +
 					str(row["Department"]) + " will be joining " + str(row["Company"]) + " as " + str(row["Profile"]) + ". Here are some brief insights of " + y + ".\n\n") 
@@ -88,17 +89,9 @@ if __name__ == "__main__":
 			"## Insights on the Selection Process" + "\n")
 		file.write(
 			str(row["Insights on the Selection Process"]) + "\n" + "\n")
-		file.write(
-			"## Insights on the Interview Process" + "\n")
-		file.write(
-			str(row["Q5. Insights on Interview Process?"]) + "\n" + "\n")
-		file.write(
-			"## Sample Interview Questions" + "\n")
-		file.write(
-			str(row["Q6. Sample Interview Questions?"]) + "\n" + "\n")
 		file.write("##  Preparation Resources" + "\n")
 		file.write(str(
-			row["Preparation Resources"]) + "\n\n")
+			row[" Preparation Resources "]) + "\n\n")
 		file.write(
 			"## Advice for students (dos and don’ts)? " + "\n")
 		file.write(str(
