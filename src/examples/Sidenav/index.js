@@ -46,12 +46,14 @@ import {
   setTransparentSidenav,
   setWhiteSidenav,
 } from "context";
+import { useAuthStore } from "store/useAuthStore";
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = controller;
   const location = useLocation();
   const collapseName = location.pathname.replace("/", "");
+  const { user, loading } = useAuthStore();
 
   let textColor = "white";
 
@@ -72,7 +74,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     }
 
     /** 
-     The event listener that's calling the handleMiniSidenav function when resizing the window.
+    The event listener that's calling the handleMiniSidenav function when resizing the window.
     */
     window.addEventListener("resize", handleMiniSidenav);
 
@@ -86,8 +88,12 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   // Render all the routes from the routes.js (All the visible items on the Sidenav)
   const renderRoutes = routes.map(({ type, name, icon, title, noCollapse, key, href, route }) => {
     let returnValue;
-
-    if (type === "collapse") {
+    const allowedRoutes = ["Menu", "Sign In"];
+    if (!user && !allowedRoutes.includes(name)) {
+      return;
+    } else if (user && name === "Sign In") {
+      return;
+    } else if (type === "collapse") {
       returnValue = href ? (
         <Link
           href={href}
@@ -179,19 +185,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         }
       />
       <List>{renderRoutes}</List>
-      <MDBox p={2} mt="auto">
-        <MDButton
-          component="a"
-          href="https://www.creative-tim.com/product/material-dashboard-pro-react"
-          target="_blank"
-          rel="noreferrer"
-          variant="gradient"
-          color={sidenavColor}
-          fullWidth
-        >
-          upgrade to pro
-        </MDButton>
-      </MDBox>
     </SidenavRoot>
   );
 }

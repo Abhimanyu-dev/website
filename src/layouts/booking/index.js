@@ -48,30 +48,32 @@ Item.propTypes = {
   name: PropTypes.string,
 };
 
-function Tables() {
-  const columns = [{ Header: "Item", accessor: "item", width: "45%", align: "center" }];
+function Bookings() {
+  const columns = [
+    { Header: "Item", accessor: "name", width: "45%", align: "center" },
+    { Header: "Price", accessor: "price", width: "45%", align: "center" },
+  ];
 
   const formatMenu = (menu) => {
-    if (menu.length > 0) {
-      return menu.map((day) => {
-        const updated = {};
+    return menu.map((day) => {
+      const updated = {};
 
-        for (const key in day) {
-          updated[key] = day[key].map((item) => <Item name={item.item} key={key} />);
-        }
-        return day;
-      });
-    }
+      for (const key in day) {
+        updated[key] = day[key].map((item) => <Item name={item.item} key={key} />);
+      }
+      return day;
+    });
   };
 
-  const [rows, setRows] = useState([]);
+  const [rows, setRows] = useState(null);
   useEffect(() => {
     const getMenu = async () => {
-      const menuRef = doc(db, "config", "weekMenu");
+      const menuRef = doc(db, "config", "menu");
       const snap = await getDoc(menuRef);
 
       if (snap.exists()) {
-        setRows(formatMenu(snap.data().days));
+        console.log(snap.data());
+        setRows(snap.data());
       }
     };
     getMenu();
@@ -89,39 +91,13 @@ function Tables() {
     };
   };
 
-  if (rows.length === 0) {
+  if (rows === null) {
     return;
   }
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <Tabs
-        value={day}
-        onChange={handleDay}
-        textColor="inherit"
-        aria-label="full width tabs example"
-        indicatorColor="secondary"
-        variant="scrollable"
-        scrollButtons="auto"
-        sx={{
-          // Limit the visible width of each Tab on small screens
-          "& .MuiTab-root": {
-            flex: "2 0 50%", // show only one tab per line on small screens
-            "@media (min-width:600px)": {
-              flex: "1 1 auto",
-            },
-          },
-        }}
-      >
-        <Tab label="Sunday" {...a11yProps(0)} />
-        <Tab label="Monday" {...a11yProps(1)} />
-        <Tab label="Tuesday" {...a11yProps(2)} />
-        <Tab label="Wednesday" {...a11yProps(3)} />
-        <Tab label="Thursday" {...a11yProps(4)} />
-        <Tab label="Friday" {...a11yProps(5)} />
-        <Tab label="Saturday" {...a11yProps(6)} />
-      </Tabs>
       <MDBox pt={6} pb={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={4} mt={5}>
@@ -142,40 +118,13 @@ function Tables() {
               </MDBox>
               <MDBox pt={3}>
                 <DataTable
-                  table={{ columns, rows: rows[day]["breakFast"] }}
+                  table={{ columns, rows: rows["breakFast"] }}
                   isSorted={false}
                   entriesPerPage={false}
                   showTotalEntries={false}
                   noEndBorder
                 />
               </MDBox>
-              {rows[day]["breakFastExtras"].length != 0 && (
-                <>
-                  <MDBox
-                    mx={2}
-                    mt={3}
-                    py={1}
-                    px={2}
-                    variant="gradient"
-                    bgColor="info"
-                    borderRadius="lg"
-                    coloredShadow="info"
-                  >
-                    <MDTypography variant="h6" color="white">
-                      Extras
-                    </MDTypography>
-                  </MDBox>
-                  <MDBox pt={3}>
-                    <DataTable
-                      table={{ columns, rows: rows[day]["breakFastExtras"] }}
-                      isSorted={false}
-                      entriesPerPage={false}
-                      showTotalEntries={false}
-                      noEndBorder
-                    />
-                  </MDBox>
-                </>
-              )}
             </Card>
           </Grid>
           <Grid item xs={12} md={4} mt={5}>
@@ -196,40 +145,13 @@ function Tables() {
               </MDBox>
               <MDBox pt={3}>
                 <DataTable
-                  table={{ columns, rows: rows[day]["lunch"] }}
+                  table={{ columns, rows: rows["lunch"] }}
                   isSorted={false}
                   entriesPerPage={false}
                   showTotalEntries={false}
                   noEndBorder
                 />
               </MDBox>
-              {rows[day]["lunchExtras"].length != 0 && (
-                <>
-                  <MDBox
-                    mx={2}
-                    mt={3}
-                    py={1}
-                    px={2}
-                    variant="gradient"
-                    bgColor="info"
-                    borderRadius="lg"
-                    coloredShadow="info"
-                  >
-                    <MDTypography variant="h6" color="white">
-                      Extras
-                    </MDTypography>
-                  </MDBox>
-                  <MDBox pt={3}>
-                    <DataTable
-                      table={{ columns, rows: rows[day]["lunchExtras"] }}
-                      isSorted={false}
-                      entriesPerPage={false}
-                      showTotalEntries={false}
-                      noEndBorder
-                    />
-                  </MDBox>
-                </>
-              )}
             </Card>
           </Grid>
           <Grid item xs={12} md={4} mt={5}>
@@ -250,40 +172,13 @@ function Tables() {
               </MDBox>
               <MDBox pt={3}>
                 <DataTable
-                  table={{ columns, rows: rows[day]["dinner"] }}
+                  table={{ columns, rows: rows["dinner"] }}
                   isSorted={false}
                   entriesPerPage={false}
                   showTotalEntries={false}
                   noEndBorder
                 />
               </MDBox>
-              {rows[day]["dinnerExtras"].length != 0 && (
-                <>
-                  <MDBox
-                    mx={2}
-                    mt={3}
-                    py={1}
-                    px={2}
-                    variant="gradient"
-                    bgColor="info"
-                    borderRadius="lg"
-                    coloredShadow="info"
-                  >
-                    <MDTypography variant="h6" color="white">
-                      Extras
-                    </MDTypography>
-                  </MDBox>
-                  <MDBox pt={3}>
-                    <DataTable
-                      table={{ columns, rows: rows[day]["dinnerExtras"] }}
-                      isSorted={false}
-                      entriesPerPage={false}
-                      showTotalEntries={false}
-                      noEndBorder
-                    />
-                  </MDBox>
-                </>
-              )}
             </Card>
           </Grid>
         </Grid>
@@ -293,4 +188,4 @@ function Tables() {
   );
 }
 
-export default Tables;
+export default Bookings;
